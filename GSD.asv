@@ -15,9 +15,7 @@ function [A_new,A_stoch,realz_stoch] = GSD(A_new1,ssd,stoch,n_stoch,samp,acf)
 
 % outputs
 % 1. A_new - New fields
-% 2. A_stoch - Stochastic fields that were used where no points were found
-% 3. realz_stoch - For reproducibilty (Cannot reproduce exactly due to
-% random sampling at Line 239)
+% 2. A_stoch - Stochastic fields that were used wh
 
 rng('default')
 rng('shuffle')

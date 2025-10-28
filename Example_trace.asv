@@ -1,0 +1,63 @@
+clear
+close all
+clc
+
+
+L_min = 20*1000;   % Reference 2D field 
+W_min = 14*1000; 
+
+L = [ 25 30 35 40 ].*1000;   % Increased 2D fields for which VK fields are generated with reference field taken from above.
+W = [ 14 14 14 14 ].*1000;
+ 
+
+% -1 standard deviation.!!
+
+samp = [200;200];
+
+lx = [0:samp(2):L_min];
+lz = [0:samp(2):W_min];
+
+
+ax = 4; az = 4; H = 0.77; corr1 = [az ax H]; lmin =  10*25; lmax = L_min; 
+realz = 458
+acf = 'ak';  % 'gs' for Gaussian and 'ak' for Von-Karman
+
+field0 = SpecSyn3([W_min L_min],samp,[az*1000 ax*1000 H],acf,realz,lmin,lmax);
+
+sigma = std(field0(:));
+field0_old = field0;
+
+figure;
+imagesc(lx./1000,lz./1000,field0_old);
+% colormap(slipcolor); colorbar; 
+axis tight equal;
+set(gcf,'position',[200,200,500,500])
+
+% Taking the first line of this field (field0) as the reference trace for generating different
+% fields....!!
+
+reference_trace = field0(1,:);
+
+%% 
+
+num_realz = 10;  % Number of fields to generate
+
+A_new = [];
+for i=1:num_realz
+
+
+A_new{i,1} = zeros(size(field0));
+A_new{i,1}(1,:) = reference_trace;
+
+
+end
+
+% GSD parameters
+ssd.neighbor_radius = 2; % in km; 
+ssd.corr = corr1; 
+
+
+% Takes around ~3min for Von karman,.
+    
+[A_new2{i,1},A_stoch{i,1},realz_stoch{i,1}] = GSD(A_new,ssd,[W(i),L(i)],num_realz,samp./1000,acf); 
+   
