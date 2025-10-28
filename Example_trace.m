@@ -3,17 +3,20 @@ close all
 clc
 
 
-L = 20*1000;   % 2D field geometry
+L = 20*1000;   % 2D field geometry in m
 W = 10*1000; 
 
-samp = [200;200];
+samp = [200;200];   % in m
 
 lx = [0:samp(2):L];
 lz = [0:samp(2):W];
 
+% correlation length parameters for Von Karman/Gaussian
+ax = 4; az = 4; H = 0.77; 
+corr1 = [az ax H]; lmin =  10*25; lmax = L; 
 
-ax = 4; az = 4; H = 0.77; corr1 = [az ax H]; lmin =  10*25; lmax = L; 
-realz = 458
+realz = 458; % seed value
+
 acf = 'ak';  % 'gs' for Gaussian and 'ak' for Von-Karman
 
 field0 = SpecSyn3([W L],samp,[az*1000 ax*1000 H],acf,realz,lmin,lmax);
